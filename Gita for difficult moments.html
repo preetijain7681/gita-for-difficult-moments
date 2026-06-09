@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gita for Difficult Moments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=Gentium+Book+Plus:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#14110d;
+    --ink:#1d1813;
+    --panel:#221c15;
+    --panel-2:#2a2219;
+    --line:#3a3024;
+    --gold:#c9a45c;
+    --gold-soft:#d8bd86;
+    --saffron:#d98a3d;
+    --parch:#ece2cf;
+    --parch-dim:#bcae93;
+    --muted:#8c7f68;
+    --res:#9bbf8a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 700px at 78% -8%, rgba(201,164,92,.10), transparent 60%),
+      radial-gradient(900px 600px at 10% 110%, rgba(217,138,61,.07), transparent 55%),
+      var(--night);
+    color:var(--parch);
+    font-family:'Spectral',Georgia,serif;
+    font-weight:300;
+    line-height:1.65;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 120px;position:relative;z-index:1}
+
+  /* Header */
+  header{padding:84px 0 34px;text-align:center;position:relative}
+  .om{font-family:'Gentium Book Plus',serif;font-size:46px;color:var(--gold);opacity:.85;line-height:1;
+      animation:rise 1.1s ease both}
+  .kicker{font-family:'Spectral';font-weight:400;letter-spacing:.42em;text-transform:uppercase;
+          font-size:11.5px;color:var(--gold);margin-top:20px;animation:rise 1.1s .08s ease both}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(40px,7vw,68px);
+     line-height:1.04;letter-spacing:.005em;margin:14px 0 0;color:var(--parch);
+     animation:rise 1.1s .16s ease both}
+  h1 em{font-style:italic;color:var(--gold-soft)}
+  .lede{max-width:600px;margin:22px auto 0;color:var(--parch-dim);font-size:17px;font-weight:300;
+        animation:rise 1.1s .24s ease both}
+  .rule{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+        margin:34px auto 0;animation:rise 1.1s .3s ease both}
+
+  /* note card */
+  .note{margin:34px auto 0;max-width:660px;border:1px solid var(--line);border-radius:3px;
+        background:linear-gradient(180deg,var(--panel),transparent);padding:16px 20px;
+        font-size:13.5px;color:var(--muted);line-height:1.6;animation:rise 1.1s .36s ease both}
+  .note b{color:var(--parch-dim);font-weight:500}
+
+  /* controls */
+  .controls{position:sticky;top:0;z-index:20;margin:20px 0 8px;padding:10px 0;
+            background:var(--night)}
+  .search{position:relative;max-width:480px;margin:0 auto}
+  .chips{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;justify-content:flex-start;
+         margin-top:12px;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .controls.scrolled .chips{display:none}
+  .search{position:relative;max-width:480px;margin:0 auto}
+  .search input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--parch);
+    font-family:'Spectral';font-size:15px;font-weight:300;padding:13px 16px 13px 42px;border-radius:3px;
+    outline:none;transition:border-color .25s,box-shadow .25s}
+  .search input::placeholder{color:var(--muted)}
+  .search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,164,92,.12)}
+  .search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted)}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:16px}
+  .chip{font-family:'Spectral';font-weight:400;font-size:12.5px;letter-spacing:.02em;color:var(--parch-dim);
+    background:transparent;border:1px solid var(--line);padding:6px 13px;border-radius:100px;cursor:pointer;
+    transition:all .2s}
+  .chip:hover{border-color:var(--gold);color:var(--gold-soft)}
+  .chip.on{background:var(--gold);border-color:var(--gold);color:#211a10;font-weight:500}
+
+  /* situation block */
+  .sit{border-top:1px solid var(--line);margin-top:0}
+  .sit-head{display:flex;align-items:baseline;gap:16px;padding:26px 4px 24px;cursor:pointer;
+    transition:background .2s}
+  .sit-head:hover{background:rgba(201,164,92,.03)}
+  .sit-no{font-family:'Cormorant Garamond';font-size:20px;color:var(--gold);font-style:italic;
+    min-width:38px;opacity:.8}
+  .sit-main{flex:1}
+  .sit-name{font-family:'Cormorant Garamond';font-weight:500;font-size:clamp(24px,4vw,32px);
+    line-height:1.1;color:var(--parch)}
+  .sit-essence{color:var(--parch-dim);font-size:14.5px;margin-top:5px;font-style:italic;font-weight:300}
+  .sit-meta{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:12px;
+    letter-spacing:.04em;white-space:nowrap}
+  .caret{width:11px;height:11px;border-right:1.5px solid var(--gold);border-bottom:1.5px solid var(--gold);
+    transform:rotate(45deg);transition:transform .3s;opacity:.7}
+  .sit.open .caret{transform:rotate(225deg)}
+  .verses{display:none;padding:0 4px 30px}
+  .sit.open .verses{display:block;animation:fade .5s ease}
+
+  /* verse card */
+  .v{border-left:1px solid var(--line);padding:0 0 0 22px;margin:0 0 26px 14px;position:relative}
+  .v::before{content:"";position:absolute;left:-4px;top:9px;width:7px;height:7px;border-radius:50%;
+    background:var(--gold);opacity:.55}
+  .v.res::before{background:var(--res);opacity:.85}
+  .v-ref{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+  .v-num{font-family:'Cormorant Garamond';font-style:italic;font-size:17px;color:var(--gold-soft);
+    letter-spacing:.02em}
+  .v.res .v-num{color:var(--res)}
+  .tag{font-family:'Spectral';font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--res);border:1px solid rgba(155,191,138,.4);padding:2px 8px;border-radius:100px}
+  .skt{font-family:'Gentium Book Plus',serif;font-size:17.5px;line-height:1.85;color:var(--gold-soft);
+    white-space:pre-line;margin-bottom:11px;font-style:italic;letter-spacing:.005em}
+  .tr{font-size:16px;color:var(--parch);line-height:1.7;margin-bottom:10px}
+  .nt{font-size:14px;color:var(--parch-dim);line-height:1.62;padding-left:13px;border-left:1px solid var(--line);
+      font-style:italic;font-weight:300}
+
+  .empty{text-align:center;padding:80px 0;color:var(--muted);font-style:italic;font-size:17px}
+  footer{text-align:center;margin-top:70px;padding-top:30px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13px;line-height:1.7}
+  footer .om2{font-family:'Gentium Book Plus';font-size:22px;color:var(--gold);opacity:.7;display:block;margin-bottom:14px}
+
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @media(max-width:560px){
+    .sit-head{flex-wrap:wrap;gap:8px}
+    .sit-meta{width:100%;padding-left:54px}
+    .v{padding-left:18px;margin-left:8px}
+  }
+
+  @media(max-width:768px){
+    .wrap{padding:0 16px 80px}
+    .controls{margin:20px 0 8px}
+    .search input{font-size:16px;padding:14px 16px 14px 42px}
+    .sit-head{padding:18px 0}
+    .sit-name{font-size:26px}
+    .sit-essence{font-size:14px}
+    .v{margin-left:0;padding-left:16px}
+    .skt{font-size:16px;line-height:1.7}
+    .tr{font-size:15px}
+  }
+
+
+.filter-wrap{max-width:480px;margin:12px auto 0}
+#categoryFilter{width:100%;padding:14px 16px;background:var(--panel);color:var(--parch);
+border:1px solid var(--line);border-radius:4px;font-family:'Spectral',serif;font-size:15px;outline:none}
+#categoryFilter:focus{border-color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="om">ॐ</div>
+    <div class="kicker">Bhagavad Gītā · Saṅkaṭa</div>
+    <h1>When the Mind <em>Falters</em></h1>
+    <p class="lede">Twenty human troubles, and the verses where Kṛṣṇa meets Arjuna in his — and answers.</p>
+    <div class="rule"></div>
+  </header>
+
+  <div class="controls">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="text" placeholder="Search a feeling, a word, or a verse (e.g. anger, 2:63, fear)…" autocomplete="off">
+    </div>
+    <div class="filter-wrap"><select id="categoryFilter"><option value="">All Situations</option></select></div>
+  </div>
+
+  <div id="list"></div>
+
+  <footer>
+    <span class="om2">ॐ</span>
+    “Whenever there is a withering of dharma, I come into being.” — a tool for returning to the verses, not a substitute for them.
+  </footer>
+</div>
+
+<script>
+/* ---- Verse text: IAST Sanskrit (s), faithful English (t), interpretive note (n) ---- */
+const V = {
+"2:3":{s:"klaibyaṁ mā sma gamaḥ pārtha naitat tvayy upapadyate\nkṣudraṁ hṛdaya-daurbalyaṁ tyaktvottiṣṭha parantapa",t:"Do not yield to this faint-heartedness, Arjuna; it does not befit you. Cast off this petty weakness of heart and rise, O scorcher of foes.",n:"The whole teaching opens here, with a refusal to let despair have the last word. Before any philosophy, a hand extended: rise."},
+"2:15":{s:"yaṁ hi na vyathayanty ete puruṣaṁ puruṣarṣabha\nsama-duḥkha-sukhaṁ dhīraṁ so 'mṛtatvāya kalpate",t:"The steady person whom these do not disturb, O best of men — to whom pain and pleasure are alike — is fit for immortality.",n:"The answer to low spells deepens: to meet pleasure and pain with the same evenness is not mere endurance but the very doorway to the deathless."},
+"2:28":{s:"avyaktādīni bhūtāni vyakta-madhyāni bhārata\navyakta-nidhanāny eva tatra kā paridevanā",t:"Beings are unmanifest in their beginnings, manifest in the middle, and unmanifest again in their ends, O Bhārata. What, then, is there to grieve over?",n:"Resolution to loss. Seen whole, a life is a brief visibility between two mysteries — and what was hidden before and hidden after was never truly ours to lose."},
+"3:19":{s:"tasmād asaktaḥ satataṁ kāryaṁ karma samācara\nasakto hy ācaran karma param āpnoti pūruṣaḥ",t:"Therefore, always perform the work that must be done without attachment; for, performing action without attachment, a person attains the Supreme.",n:"Resolution to laziness. The cure for inertia is not anxious striving but unattached doing — act fully, release the fruit, and the act itself carries you upward."},
+"3:42":{s:"indriyāṇi parāṇy āhur indriyebhyaḥ paraṁ manaḥ\nmanasas tu parā buddhir yo buddheḥ paratas tu saḥ",t:"The senses are said to be higher than the body; higher than the senses is the mind; higher than the mind is the intellect; and higher even than the intellect is the self.",n:"Before the final blow against desire, the ground is mapped: a ladder from the senses up to the self, showing the height from which the enemy must be met."},
+"4:39":{s:"śraddhāvāl labhate jñānaṁ tat-paraḥ saṁyatendriyaḥ\njñānaṁ labdhvā parāṁ śāntim acireṇādhigacchati",t:"One who has faith, who is devoted to it and has restrained the senses, gains knowledge; and having gained knowledge, he soon reaches the supreme peace.",n:"Resolution to seeking peace. A sequence is laid out: faith, devotion, and mastered senses ripen into knowledge — and knowledge, before long, becomes peace itself."},
+"6:34":{s:"cañcalaṁ hi manaḥ kṛṣṇa pramāthi balavad dṛḍham\ntasyāhaṁ nigrahaṁ manye vāyor iva su-duṣkaram",t:"For the mind is restless, Kṛṣṇa — turbulent, strong, and unyielding. To restrain it, I think, is as hard as to restrain the wind.",n:"Arjuna names the difficulty exactly as we feel it. The honest objection is set down first, so the reply that follows is no easy reassurance."},
+"9:31":{s:"kṣipraṁ bhavati dharmātmā śaśvac-chāntiṁ nigacchati\nkaunteya pratijānīhi na me bhaktaḥ praṇaśyati",t:"Swiftly he becomes righteous and attains lasting peace. Declare it boldly, Arjuna — My devotee never perishes.",n:"Resolution to the sense of sin, completing the verse before it. The turn toward the good is not slow probation but swift, sealed by a plain promise: such a one is never lost."},
+"9:32":{s:"māṁ hi pārtha vyapāśritya ye 'pi syuḥ pāpa-yonayaḥ\nstriyo vaiśyās tathā śūdrās te 'pi yānti parāṁ gatim",t:"For, taking refuge in Me, O Pārtha, even those of lowly birth — women, traders, and laborers — they too reach the supreme goal.",n:"Resolution to being looked down upon. The highest destination is declared open to all, whatever rank the world assigns; refuge alone is the qualification."},
+"2:72":{s:"eṣā brāhmī sthitiḥ pārtha naināṁ prāpya vimuhyati\nsthitvāsyām anta-kāle 'pi brahma-nirvāṇam ṛcchati",t:"This is the state of the Absolute, O Pārtha. Reaching it, one is no longer deluded; established in it, even at the final hour, one attains liberation in the Absolute.",n:"The closing verse of the second chapter and the summit of the peace it describes: a stillness that, once reached, cannot be lost — not even at death."},
+"14:6":{s:"tatra sattvaṁ nirmalatvāt prakāśakam anāmayam\nsukha-saṅgena badhnāti jñāna-saṅgena cānagha",t:"Among these, goodness, being pure, is luminous and free from ill; it binds, O sinless one, through attachment to happiness and to knowledge.",n:"The way up from a darkened, guilt-bound state is to cultivate goodness — luminous and healing — even though its very brightness is a tie one eventually outgrows."},
+"13:18":{s:"jyotiṣām api taj jyotis tamasaḥ param ucyate\njñānaṁ jñeyaṁ jñāna-gamyaṁ hṛdi sarvasya viṣṭhitam",t:"It is the light even of lights, said to be beyond all darkness. It is knowledge, the object of knowledge, and the goal to be reached by knowledge — seated in the heart of all.",n:"For loneliness: the same light is set in every heart without exception. What is most intimately within you is the very thing that joins you to all that lives."},
+"16:5":{s:"daivī sampad vimokṣāya nibandhāyāsurī matā\nmā śucaḥ sampadaṁ daivīm abhijāto 'si pāṇḍava",t:"The divine nature is held to lead to liberation, the demoniac to bondage. Do not grieve, O Pāṇḍava — you are born to the divine nature.",n:"Resolution to pride and its fear. Right after the unsparing list, a tenderness: the failings were named not to condemn you but to free you — your truer nature is the divine one."},
+"18:62":{s:"tam eva śaraṇaṁ gaccha sarva-bhāvena bhārata\ntat-prasādāt parāṁ śāntiṁ sthānaṁ prāpsyasi śāśvatam",t:"Take refuge in Him alone with your whole being, O Bhārata. By His grace you will attain supreme peace and the eternal abode.",n:"Resolution to forgetting, following directly from the verse before. Once the inner guide is seen, only one thing remains — to turn toward it wholly, and be carried the rest of the way."},
+"2:7":{s:"kārpaṇya-doṣopahata-svabhāvaḥ pṛcchāmi tvāṁ dharma-sammūḍha-cetāḥ\nyac chreyaḥ syān niścitaṁ brūhi tan me śiṣyas te 'haṁ śādhi māṁ tvāṁ prapannam",t:"My nature is overcome by the flaw of pity; my mind is bewildered about my duty. I ask You — tell me clearly what is best. I am Your student, surrendered to You; instruct me.",n:"Confusion becomes the doorway. Arjuna stops insisting he knows and admits he does not — and only then can he be taught."},
+"2:11":{s:"śrī-bhagavān uvāca\naśocyān anvaśocas tvaṁ prajñā-vādāṁś ca bhāṣase\ngatāsūn agatāsūṁś ca nānuśocanti paṇḍitāḥ",t:"The Blessed One said: You grieve for those who need no grief, yet you speak words of wisdom. The wise mourn neither for the living nor for the dead.",n:"Kṛṣṇa's first true reply. The grief is not scolded but reframed — its premise is gently dismantled before its cure is offered."},
+"2:13":{s:"dehino 'smin yathā dehe kaumāraṁ yauvanaṁ jarā\ntathā dehāntara-prāptir dhīras tatra na muhyati",t:"As the embodied soul passes, in this body, through childhood, youth, and age, so it passes to another body. The steady are not bewildered by this.",n:"Death is set in the same key as growing up — a change of form, not an ending. Composure follows from seeing the continuity."},
+"2:14":{s:"mātrā-sparśās tu kaunteya śītoṣṇa-sukha-duḥkha-dāḥ\nāgamāpāyino 'nityās tāṁs titikṣasva bhārata",t:"The contacts of the senses, Arjuna, bring cold and heat, pleasure and pain. They come and go and do not last. Endure them, O Bhārata.",n:"A practical instruction for low spells: feelings are weather, arriving and departing. Endurance is simply not mistaking weather for climate."},
+"2:20":{s:"na jāyate mriyate vā kadācin nāyaṁ bhūtvā bhavitā vā na bhūyaḥ\najo nityaḥ śāśvato 'yaṁ purāṇo na hanyate hanyamāne śarīre",t:"It is never born and never dies; having been, it will not cease to be. Unborn, eternal, everlasting, ancient — it is not slain when the body is slain.",n:"The grief over loss meets the claim that the essential person was never the thing that perished."},
+"2:22":{s:"vāsāṁsi jīrṇāni yathā vihāya navāni gṛhṇāti naro 'parāṇi\ntathā śarīrāṇi vihāya jīrṇāny anyāni saṁyāti navāni dehī",t:"As one casts off worn-out clothes and takes up new ones, so the embodied soul casts off worn bodies and enters others that are new.",n:"The most consoling image in the chapter: death as the setting-down of something outgrown, not the loss of the one who wore it."},
+"2:25":{s:"avyakto 'yam acintyo 'yam avikāryo 'yam ucyate\ntasmād evaṁ viditvainaṁ nānuśocitum arhasi",t:"It is called unmanifest, unthinkable, unchanging. Knowing it to be so, you ought not to grieve.",n:"The conclusion is drawn softly: understand what the self truly is, and the grief loosens its own grip."},
+"2:27":{s:"jātasya hi dhruvo mṛtyur dhruvaṁ janma mṛtasya ca\ntasmād aparihārye 'rthe na tvaṁ śocitum arhasi",t:"For the born, death is certain; for the dead, birth is certain. Therefore you should not grieve over what cannot be avoided.",n:"Krishna's resolution to loss: the cycle is the order of things. Grief at the unavoidable is grief turned against reality itself."},
+"2:56":{s:"duḥkheṣv anudvigna-manāḥ sukheṣu vigata-spṛhaḥ\nvīta-rāga-bhaya-krodhaḥ sthita-dhīr munir ucyate",t:"One whose mind is untroubled in sorrow and without craving in pleasure, free of attachment, fear, and anger — such a sage is called steady in wisdom.",n:"The portrait of the unangered person comes first, so the chain that follows can be seen against what it costs us."},
+"2:59":{s:"viṣayā vinivartante nirāhārasya dehinaḥ\nrasa-varjaṁ raso 'py asya paraṁ dṛṣṭvā nivartate",t:"The objects of sense fall away from one who abstains, but the taste for them lingers. Even that taste departs when one has seen the higher.",n:"Resolution to temptation. Willpower alone leaves the hunger intact; only a glimpse of something better dissolves the pull at its root."},
+"2:60":{s:"yatato hy api kaunteya puruṣasya vipaścitaḥ\nindriyāṇi pramāthīni haranti prasabhaṁ manaḥ",t:"Even for the discerning person who strives, Arjuna, the turbulent senses forcibly carry away the mind.",n:"An honest acknowledgment before any remedy: temptation overpowers even the wise. The struggle is not a personal failing."},
+"2:61":{s:"tāni sarvāṇi saṁyamya yukta āsīta mat-paraḥ\nvaśe hi yasyendriyāṇi tasya prajñā pratiṣṭhitā",t:"Restraining them all, one should sit intent on Me. For one whose senses are mastered, wisdom stands firm.",n:"The senses aren't conquered by force but by anchoring the mind on something higher than what tempts it."},
+"2:62":{s:"dhyāyato viṣayān puṁsaḥ saṅgas teṣūpajāyate\nsaṅgāt sañjāyate kāmaḥ kāmāt krodho 'bhijāyate",t:"Dwelling on the objects of sense, a person grows attached to them; from attachment is born desire, and from desire, anger.",n:"Anger is traced to its quiet origin — not the offense in front of us, but the thought we keep returning to. The cure lies upstream."},
+"2:63":{s:"krodhād bhavati sammohaḥ sammohāt smṛti-vibhramaḥ\nsmṛti-bhraṁśād buddhi-nāśo buddhi-nāśāt praṇaśyati",t:"From anger comes delusion; from delusion, confused memory; from confused memory, the ruin of judgment; and from ruined judgment, one is lost.",n:"The full descent in a single breath. Each step seems small; the destination is the loss of the self."},
+"2:64":{s:"rāga-dveṣa-vimuktais tu viṣayān indriyaiś caran\nātma-vaśyair vidheyātmā prasādam adhigacchati",t:"But the self-governed one, moving among the objects of sense with senses free of attraction and aversion, attains serenity.",n:"Resolution to anger. The chain is broken not by suppression but by loosening the grip of liking and disliking that feeds it."},
+"2:65":{s:"prasāde sarva-duḥkhānāṁ hānir asyopajāyate\nprasanna-cetaso hy āśu buddhiḥ paryavatiṣṭhate",t:"In that serenity, all sorrows fall away, for the judgment of the tranquil-minded is soon firmly established.",n:"The very faculty anger destroyed — clear judgment — is restored by serenity. The arc closes where it began, but whole."},
+"2:66":{s:"nāsti buddhir ayuktasya na cāyuktasya bhāvanā\nna cābhāvayataḥ śāntir aśāntasya kutaḥ sukham",t:"There is no clear judgment for the unsteady, and no meditation without it; without meditation, no peace — and for the peaceless, where is happiness?",n:"Peace is shown to be foundational, not optional. Everything we want rests on it, so it cannot be skipped on the way to them."},
+"2:70":{s:"āpūryamāṇam acala-pratiṣṭhaṁ samudram āpaḥ praviśanti yadvat\ntadvat kāmā yaṁ praviśanti sarve sa śāntim āpnoti na kāma-kāmī",t:"As waters enter the ocean — ever filled, ever unmoved — so the one whom all desires enter attains peace; not the one who chases desire.",n:"Peace is not an empty mind but an unmoved one. Desires may arrive like rivers; the question is whether they move you."},
+"2:71":{s:"vihāya kāmān yaḥ sarvān pumāṁś carati niḥspṛhaḥ\nnirmamo nirahaṅkāraḥ sa śāntim adhigacchati",t:"The one who, abandoning all desires, moves about free of longing, without 'mine,' without 'I' — that one attains peace.",n:"Resolution to seeking peace. Peace is not gained but uncovered, by setting down craving, possession, and the ego that holds them."},
+"3:2":{s:"vyāmiśreṇeva vākyena buddhiṁ mohayasīva me\ntad ekaṁ vada niścitya yena śreyo 'ham āpnuyām",t:"With seemingly mixed words You confuse my understanding. Tell me, decisively, the one path by which I may reach the highest good.",n:"Confusion returns, sharper. Arjuna feels the teaching contradicts itself and asks for one clear thread."},
+"3:3":{s:"śrī-bhagavān uvāca\nloke 'smin dvi-vidhā niṣṭhā purā proktā mayānagha\njñāna-yogena sāṅkhyānāṁ karma-yogena yoginām",t:"The Blessed One said: In this world, O sinless one, I taught long ago a twofold path — the yoga of knowledge for the reflective, the yoga of action for the active.",n:"Resolution to confusion. The contradiction was never real: two roads, suited to two temperaments, leading to one place."},
+"3:8":{s:"niyataṁ kuru karma tvaṁ karma jyāyo hy akarmaṇaḥ\nśarīra-yātrāpi ca te na prasiddhyed akarmaṇaḥ",t:"Do the work that is yours to do, for action is better than inaction. Even your body's upkeep cannot succeed through inaction.",n:"Resolution to laziness. Inaction is not rest but slow decline — even staying alive is something we must actively do."},
+"3:20":{s:"karmaṇaiva hi saṁsiddhim āsthitā janakādayaḥ\nloka-saṅgraham evāpi sampaśyan kartum arhasi",t:"It was through action alone that Janaka and others reached perfection. You too should act, if only for the holding-together of the world.",n:"Even the realized kept working — not for themselves, but to keep the world's fabric intact. Motivation found beyond the self."},
+"3:37":{s:"śrī-bhagavān uvāca\nkāma eṣa krodha eṣa rajo-guṇa-samudbhavaḥ\nmahāśano mahā-pāpmā viddhy enam iha vairiṇam",t:"The Blessed One said: It is desire, it is anger, born of the mode of passion — all-devouring, deeply harmful. Know it here as the enemy.",n:"Lust is named plainly as the adversary. Naming it correctly is the first act of freedom from it."},
+"3:41":{s:"tasmāt tvam indriyāṇy ādau niyamya bharatarṣabha\npāpmānaṁ prajahi hy enaṁ jñāna-vijñāna-nāśanam",t:"Therefore, O best of the Bharatas, first govern the senses, then strike down this destroyer of knowledge and insight.",n:"The order matters: first the senses, then the enemy that rides them — meet desire early, before it gathers momentum."},
+"3:43":{s:"evaṁ buddheḥ paraṁ buddhvā saṁstabhyātmānam ātmanā\njahi śatruṁ mahā-bāho kāma-rūpaṁ durāsadam",t:"Knowing the self to be higher than the intellect, and steadying the lower self by the higher, slay the enemy in the form of desire, so hard to face, O mighty-armed.",n:"Resolution to lust. The decisive blow comes not from the mind alone but from a place above it — the self steadying the self."},
+"4:10":{s:"vīta-rāga-bhaya-krodhā man-mayā mām upāśritāḥ\nbahavo jñāna-tapasā pūtā mad-bhāvam āgatāḥ",t:"Freed from attachment, fear, and anger, filled with Me and taking refuge in Me, many — purified by the fire of knowledge — have reached My state.",n:"Resolution to fear. Fear is named in the same breath as attachment and anger, and the same refuge dissolves all three."},
+"4:11":{s:"ye yathā māṁ prapadyante tāṁs tathaiva bhajāmy aham\nmama vartmānuvartante manuṣyāḥ pārtha sarvaśaḥ",t:"In whatever way people approach Me, in that same way I receive them. By every path, in all things, they follow the way to Me.",n:"For the loss of hope: no sincere step is ignored, and no path is the wrong one. You are met exactly where you stand."},
+"4:36":{s:"api ced asi pāpebhyaḥ sarvebhyaḥ pāpa-kṛttamaḥ\nsarvaṁ jñāna-plavenaiva vṛjinaṁ santariṣyasi",t:"Even were you the worst of all wrongdoers, by the boat of knowledge alone you would cross over all wickedness.",n:"To the one drowning in a sense of sin: knowledge is offered as a vessel that no past, however heavy, can sink."},
+"4:37":{s:"yathaidhāṁsi samiddho 'gnir bhasmasāt kurute 'rjuna\njñānāgniḥ sarva-karmāṇi bhasmasāt kurute tathā",t:"As a kindled fire turns firewood to ash, Arjuna, so the fire of knowledge turns all actions to ash.",n:"Not merely forgiven but consumed — knowledge does not negotiate with the past, it burns through it entirely."},
+"5:10":{s:"brahmaṇy ādhāya karmāṇi saṅgaṁ tyaktvā karoti yaḥ\nlipyate na sa pāpena padma-patram ivāmbhasā",t:"One who acts offering all actions to the Absolute, abandoning attachment, is untouched by sin — as a lotus leaf by water.",n:"The image of release: act fully, claim nothing, and consequence rolls off like water that cannot wet the leaf."},
+"5:18":{s:"vidyā-vinaya-sampanne brāhmaṇe gavi hastini\nśuni caiva śva-pāke ca paṇḍitāḥ sama-darśinaḥ",t:"In a learned and humble brāhmaṇa, in a cow, an elephant, a dog, and an outcaste, the wise see the same.",n:"For the one held beneath others: the deepest sight makes no rankings. The same presence shines in the honored and the despised alike."},
+"5:19":{s:"ihaiva tair jitaḥ sargo yeṣāṁ sāmye sthitaṁ manaḥ\nnirdoṣaṁ hi samaṁ brahma tasmād brahmaṇi te sthitāḥ",t:"Even here, those whose mind rests in equanimity have conquered birth and death. The Absolute is flawless and impartial; so they rest in the Absolute.",n:"To meet contempt with an even mind is no mere coping — it is, the verse says, already a kind of victory over the whole cycle."},
+"5:21":{s:"bāhya-sparśeṣv asaktātmā vindaty ātmani yat sukham\nsa brahma-yoga-yuktātmā sukham akṣayam aśnute",t:"One unattached to outer contacts finds the joy that is within; united with the Absolute, that one enjoys imperishable happiness.",n:"Resolution to depression. The verse points past the outer world that disappoints us toward a joy that does not depend on it."},
+"5:22":{s:"ye hi saṁsparśa-jā bhogā duḥkha-yonaya eva te\nādy-antavantaḥ kaunteya na teṣu ramate budhaḥ",t:"The pleasures born of contact are only wombs of pain; they begin and they end, Arjuna. The wise do not delight in them.",n:"Lust is met with clear sight: the very pleasures it promises carry their ending — and their ache — inside them from the start."},
+"5:26":{s:"kāma-krodha-viyuktānāṁ yatīnāṁ yata-cetasām\nabhito brahma-nirvāṇaṁ vartate viditātmanām",t:"For those freed of desire and anger, who have subdued the mind and known the self, liberation in the Absolute lies all around.",n:"The far side of anger: not a hard-won distant reward but a peace that, once the fire dies, is found to be everywhere already."},
+"5:29":{s:"bhoktāraṁ yajña-tapasāṁ sarva-loka-maheśvaram\nsuhṛdaṁ sarva-bhūtānāṁ jñātvā māṁ śāntim ṛcchati",t:"Knowing Me as the receiver of sacrifice and austerity, the great Lord of all worlds, the well-wishing friend of all beings — one finds peace.",n:"Resolution to seeking peace. Peace arrives with the recognition that one is held within something larger that means one well."},
+"6:5":{s:"uddhared ātmanātmānaṁ nātmānam avasādayet\nātmaiva hy ātmano bandhur ātmaiva ripur ātmanaḥ",t:"Let a person lift himself by himself; let him not drag himself down. For the self alone is the self's friend, and the self alone its enemy.",n:"The whole drama of the restless mind in one line: the same self that defeats us is the only one who can raise us."},
+"6:6":{s:"bandhur ātmātmanas tasya yenātmaivātmanā jitaḥ\nanātmanas tu śatrutve vartetātmaiva śatru-vat",t:"For one who has conquered the self by the self, the self is a friend; but for the unmastered, the very self acts like an enemy.",n:"Whether the mind is ally or adversary is not fixed — it is decided, daily, by whether it has been brought to heel."},
+"6:16":{s:"nāty-aśnatas tu yogo 'sti na caikāntam anaśnataḥ\nna cāti-svapna-śīlasya jāgrato naiva cārjuna",t:"Yoga is not for one who eats too much or too little, nor for one who sleeps too much or stays awake too much, Arjuna.",n:"For the sluggish or scattered: the path runs through the middle. Both excess and harsh denial defeat it."},
+"6:26":{s:"yato yato niścalati manaś cañcalam asthiram\ntatas tato niyamyaitad ātmany eva vaśaṁ nayet",t:"Wherever the restless, unsteady mind wanders off, from just there one should draw it back under the self's control.",n:"The entire practice in one instruction: not to prevent wandering, but to keep bringing the mind home, however many times it strays."},
+"6:30":{s:"yo māṁ paśyati sarvatra sarvaṁ ca mayi paśyati\ntasyāhaṁ na praṇaśyāmi sa ca me na praṇaśyati",t:"One who sees Me everywhere and sees all in Me — to that one I am never lost, nor is that one ever lost to Me.",n:"Resolution to loneliness. Where the divine is seen in all things, there is no empty place left in which to be alone."},
+"6:32":{s:"ātmaupamyena sarvatra samaṁ paśyati yo 'rjuna\nsukhaṁ vā yadi vā duḥkhaṁ sa yogī paramo mataḥ",t:"One who, measuring by his own self, sees the same everywhere — in joy or in sorrow — that yogī, Arjuna, is held the highest.",n:"For the one set apart: the antidote to being treated as lesser is to feel others' joy and pain as one's own."},
+"6:35":{s:"śrī-bhagavān uvāca\nasaṁśayaṁ mahā-bāho mano durnigrahaṁ calam\nabhyāsena tu kaunteya vairāgyeṇa ca gṛhyate",t:"The Blessed One said: Without doubt, mighty-armed one, the mind is restless and hard to hold. But by practice and dispassion, Arjuna, it is held.",n:"The difficulty is granted honestly, then the two tools are named: steady repetition, and a loosening of grip. No shortcut, but a way."},
+"6:36":{s:"asaṁyatātmanā yogo duṣprāpa iti me matiḥ\nvaśyātmanā tu yatatā śakyo 'vāptum upāyataḥ",t:"For the unrestrained, yoga is hard to reach — so I hold. But for one of governed mind who strives by the right means, it can be won.",n:"Resolution to the uncontrolled mind. Mastery is not promised to the gifted but to the one who keeps trying by the right means."},
+"7:14":{s:"daivī hy eṣā guṇa-mayī mama māyā duratyayā\nmām eva ye prapadyante māyām etāṁ taranti te",t:"This divine illusion of Mine, woven of the modes, is hard to cross. But those who take refuge in Me alone cross beyond it.",n:"For temptation that feels stronger than the will: the way through illusion is not to wrestle it but to step behind it, into refuge."},
+"8:28":{s:"vedeṣu yajñeṣu tapaḥsu caiva dāneṣu yat puṇya-phalaṁ pradiṣṭam\natyeti tat sarvam idaṁ viditvā yogī paraṁ sthānam upaiti cādyam",t:"Whatever merit is promised for scripture, sacrifice, austerity, and charity — knowing this, the yogī passes beyond it all and reaches the supreme, primal abode.",n:"The peace pointed to here outvalues every accumulated reward; it is the place all the practices were only pointing toward."},
+"9:22":{s:"ananyāś cintayanto māṁ ye janāḥ paryupāsate\nteṣāṁ nityābhiyuktānāṁ yoga-kṣemaṁ vahāmy aham",t:"For those who, thinking of nothing else, worship Me — to the ever-devoted I bring what they lack and guard what they have.",n:"Resolution to losing hope. A promise of being carried: what you cannot secure for yourself is secured for you."},
+"9:29":{s:"samo 'haṁ sarva-bhūteṣu na me dveṣyo 'sti na priyaḥ\nye bhajanti tu māṁ bhaktyā mayi te teṣu cāpy aham",t:"I am the same to all beings; none is hateful to Me, none dear. Yet those who worship Me with love are in Me, and I am in them.",n:"To the excluded and the lonely alike: there is a regard that plays no favorites — and within it, a closeness available to anyone who turns toward it."},
+"9:30":{s:"api cet su-durācāro bhajate mām ananya-bhāk\nsādhur eva sa mantavyaḥ samyag vyavasito hi saḥ",t:"Even one of the worst conduct, if he worships Me undividedly, is to be counted as good — for his resolve is rightly set.",n:"For the one who feels beyond saving: the turn itself counts. A whole-hearted reorientation outweighs the record behind it."},
+"9:34":{s:"man-manā bhava mad-bhakto mad-yājī māṁ namaskuru\nmām evaiṣyasi yuktvaivam ātmānaṁ mat-parāyaṇaḥ",t:"Fix your mind on Me, be devoted to Me, offer to Me, bow to Me. So united, intent on Me, you will come to Me.",n:"When hope thins out, the instruction narrows to something simple and doable: turn the mind, again, toward what holds you."},
+"10:3":{s:"yo mām ajam anādiṁ ca vetti loka-maheśvaram\nasammūḍhaḥ sa martyeṣu sarva-pāpaiḥ pramucyate",t:"One who knows Me as unborn, beginningless, the great Lord of the worlds — that undeluded one among mortals is freed from all sins.",n:"The sense of sin is dissolved at its root: in the light of a clear understanding, there is no surface left for permanent stain to cling to."},
+"11:33":{s:"tasmāt tvam uttiṣṭha yaśo labhasva jitvā śatrūn bhuṅkṣva rājyaṁ samṛddham\nmayaivaite nihatāḥ pūrvam eva nimitta-mātraṁ bhava savya-sācin",t:"Therefore rise and win glory; conquer your foes and enjoy a flourishing kingdom. By Me they are already struck down — be merely the instrument, O Arjuna.",n:"Resolution to lost motivation. The weight is lifted: you are not the lone author of the outcome, only the hand through which it moves."},
+"11:44":{s:"tasmāt praṇamya praṇidhāya kāyaṁ prasādaye tvām aham īśam īḍyam\npiteva putrasya sakheva sakhyuḥ priyaḥ priyāyārhasi deva soḍhum",t:"So, bowing low, laying my body down, I beg Your grace, O adorable Lord. As a father with a son, a friend with a friend, a lover with the beloved — bear with me, O God.",n:"The model of seeking forgiveness: not defense, but full lowering of the self, leaning on the intimacy of the bond rather than one's case."},
+"11:50":{s:"sañjaya uvāca\nity arjunaṁ vāsudevas tathoktvā svakaṁ rūpaṁ darśayām āsa bhūyaḥ\nāśvāsayām āsa ca bhītam enaṁ bhūtvā punaḥ saumya-vapur mahātmā",t:"Sañjaya said: Having spoken thus to Arjuna, Kṛṣṇa showed His own form again, and the great soul, taking once more His gentle shape, comforted the frightened one.",n:"After the overwhelming vision, the gentle form returns. Fear is not answered with more grandeur but with a familiar, reassuring face."},
+"12:13":{s:"adveṣṭā sarva-bhūtānāṁ maitraḥ karuṇa eva ca\nnirmamo nirahaṅkāraḥ sama-duḥkha-sukhaḥ kṣamī",t:"Hating no being, friendly and compassionate, free of 'mine' and ego, even in pain and pleasure, forgiving —",n:"The one who has uprooted envy is described from the inside: without the 'mine' and the 'I' that make comparison possible in the first place."},
+"12:14":{s:"santuṣṭaḥ satataṁ yogī yatātmā dṛḍha-niścayaḥ\nmayy arpita-mano-buddhir yo mad-bhaktaḥ sa me priyaḥ",t:"ever content, steady in yoga, self-governed, firm in resolve, with mind and intellect given to Me — such a devotee is dear to Me.",n:"Resolution to envy. The cure is contentment: anchored in something whole, one stops measuring oneself against what others hold."},
+"13:16":{s:"avibhaktaṁ ca bhūteṣu vibhaktam iva ca sthitam\nbhūta-bhartṛ ca taj jñeyaṁ grasiṣṇu prabhaviṣṇu ca",t:"Undivided, yet seeming divided among beings — that which is to be known is the sustainer of all beings, their devourer and their source.",n:"For loneliness: separation is the appearance, not the truth. One undivided ground holds, ends, and begins everything that seems apart."},
+"14:17":{s:"sattvāt sañjāyate jñānaṁ rajaso lobha eva ca\npramāda-mohau tamaso bhavato 'jñānam eva ca",t:"From goodness arises knowledge; from passion, greed; and from ignorance arise heedlessness, delusion, and unknowing.",n:"Greed is diagnosed precisely as a product of restless passion — which tells you where the remedy lies: in cultivating clarity instead."},
+"15:15":{s:"sarvasya cāhaṁ hṛdi sanniviṣṭo mattaḥ smṛtir jñānam apohanaṁ ca\nvedaiś ca sarvair aham eva vedyo vedānta-kṛd veda-vid eva cāham",t:"I am seated in the heart of all; from Me come memory, knowledge, and their loss. I am what all the scriptures seek to know.",n:"Resolution to forgetfulness. The very source of our forgetting is also the source of remembering — and it has never been anywhere but within."},
+"16:1":{s:"abhayaṁ sattva-saṁśuddhir jñāna-yoga-vyavasthitiḥ\ndānaṁ damaś ca yajñaś ca svādhyāyas tapa ārjavam",t:"Fearlessness, purity of heart, steadiness in the yoga of knowledge, charity, self-restraint, sacrifice, study, austerity, uprightness;",n:"Kṛṣṇa's catalogue of the higher nature opens with fearlessness — the soil in which forgiveness, and freedom from anger, can grow."},
+"16:2":{s:"ahiṁsā satyam akrodhas tyāgaḥ śāntir apaiśunam\ndayā bhūteṣv aloluptvaṁ mārdavaṁ hrīr acāpalam",t:"non-harming, truth, freedom from anger, letting-go, peace, no fault-finding, compassion for beings, no greed, gentleness, modesty, steadiness;",n:"Freedom from anger is set among gentleness and compassion — placed in company where it can no longer find fuel."},
+"16:3":{s:"tejaḥ kṣamā dhṛtiḥ śaucam adroho nāti-mānitā\nbhavanti sampadaṁ daivīm abhijātasya bhārata",t:"vigor, forgiveness, fortitude, purity, freedom from malice and from overbearing pride — these belong to one born to the divine nature, O Bhārata.",n:"Forgiveness stands beside vigor and fortitude, not weakness. To forgive is named here as a mark of strength."},
+"16:4":{s:"dambho darpo 'bhimānaś ca krodhaḥ pāruṣyam eva ca\najñānaṁ cābhijātasya pārtha sampadam āsurīm",t:"Hypocrisy, arrogance, conceit, anger, harshness, and unknowing — these belong, Arjuna, to one born to the lower nature.",n:"Pride is shown keeping company: it travels with arrogance, anger, and harshness, each feeding the others into a spiral."},
+"16:13":{s:"idam adya mayā labdham imaṁ prāpsye manoratham\nidam astīdam api me bhaviṣyati punar dhanam",t:"\u201cThis I have gained today; this longing I shall fulfill. This is mine, and this wealth too shall be mine.\u201d",n:"The inner monologue of pride and grasping, set down word for word. Hearing it as a voice — rather than as oneself — is where its grip begins to loosen."},
+"16:15":{s:"āḍhyo 'bhijanavān asmi ko 'nyo 'sti sadṛśo mayā\nyakṣye dāsyāmi modiṣya ity ajñāna-vimohitāḥ",t:"\u201cI am rich and high-born. Who else is my equal? I shall sacrifice, I shall give, I shall rejoice.\u201d Thus they are deluded by unknowing.",n:"Even generosity becomes a stage for the ego. The verse exposes the disguise so it can be seen through."},
+"16:19":{s:"tān ahaṁ dviṣataḥ krūrān saṁsāreṣu narādhamān\nkṣipāmy ajasram aśubhān āsurīṣv eva yoniṣu",t:"These hating, cruel, lowest of men I cast again and again into the cycles of existence, into harsh and lower births.",n:"The starkest warning in the Gītā about envy and cruelty: they are not punished from without so much as they bind the soul to its own lower turning."},
+"16:21":{s:"tri-vidhaṁ narakasyedaṁ dvāraṁ nāśanam ātmanaḥ\nkāmaḥ krodhas tathā lobhas tasmād etat trayaṁ tyajet",t:"Threefold is this gate of ruin, destroyer of the self: desire, anger, and greed. Therefore one should let go of these three.",n:"Lust, anger, and greed are revealed as one connected trap rather than three separate struggles — which is why they are renounced together."},
+"16:22":{s:"etair vimuktaḥ kaunteya tamo-dvārais tribhir naraḥ\nācaraty ātmanaḥ śreyas tato yāti parāṁ gatim",t:"Freed from these three gates of darkness, Arjuna, a person acts for his own good and so reaches the supreme goal.",n:"Resolution to greed. Slipping free of the three is not just avoiding harm; it opens directly onto the highest destination."},
+"17:25":{s:"tad ity anabhisandhāya phalaṁ yajña-tapaḥ-kriyāḥ\ndāna-kriyāś ca vividhāḥ kriyante mokṣa-kāṅkṣibhiḥ",t:"With the word 'tat,' and not aiming at reward, the acts of sacrifice, austerity, and the varied acts of charity are done by those who seek freedom.",n:"Resolution to greed within action itself: when the fruit is not claimed, grasping has nothing left to grip."},
+"18:26":{s:"mukta-saṅgo 'nahaṁ-vādī dhṛty-utsāha-samanvitaḥ\nsiddhy-asiddhyor nirvikāraḥ kartā sāttvika ucyate",t:"Free of attachment, without 'I'-talk, full of firmness and zeal, unchanged by success or failure — such a doer is called pure.",n:"The contrast to pride: a worker fully engaged yet with no ego staked on the result, and so untouched by either outcome."},
+"18:30":{s:"pravṛttiṁ ca nivṛttiṁ ca kāryākārye bhayābhaye\nbandhaṁ mokṣaṁ ca yā vetti buddhiḥ sā pārtha sāttvikī",t:"The understanding that knows action and withdrawal, what should and should not be done, what is to be feared and not feared, what binds and what frees — that, Arjuna, is pure.",n:"For fear: much of it comes from blurred vision. Clear discernment of what truly endangers us is itself a steadying against it."},
+"18:39":{s:"yad agre cānubandhe ca sukhaṁ mohanam ātmanaḥ\nnidrālasya-pramādotthaṁ tat tāmasam udāhṛtam",t:"The happiness that deludes the self from start to finish, arising from sleep, idleness, and negligence — that is called the happiness of darkness.",n:"Laziness named for what it is: a counterfeit comfort. The verse refuses to let inertia disguise itself as peace."},
+"18:48":{s:"saha-jaṁ karma kaunteya sa-doṣam api na tyajet\nsarvārambhā hi doṣeṇa dhūmenāgnir ivāvṛtāḥ",t:"One should not abandon the work born of one's own nature, Arjuna, even if flawed; for every undertaking is wrapped in some fault, as fire in smoke.",n:"For the discouraged: waiting for flawless conditions is itself the trap. All real work comes clouded — act anyway."},
+"18:58":{s:"mac-cittaḥ sarva-durgāṇi mat-prasādāt tariṣyasi\natha cet tvam ahaṅkārān na śroṣyasi vinaṅkṣyasi",t:"With your mind on Me, by My grace you will cross every difficulty. But if, out of ego, you will not listen, you will be lost.",n:"Pride is named as the one thing that closes the door to grace: the self that insists on itself cannot receive."},
+"18:61":{s:"īśvaraḥ sarva-bhūtānāṁ hṛd-deśe 'rjuna tiṣṭhati\nbhrāmayan sarva-bhūtāni yantrārūḍhāni māyayā",t:"The Lord abides in the heart of all beings, Arjuna, turning them all by His power, as though mounted upon a wheel.",n:"For confusion and forgetting alike: the guide was never absent. Turning inward reveals the one who has been directing all along."},
+"18:65":{s:"man-manā bhava mad-bhakto mad-yājī māṁ namaskuru\nmām evaiṣyasi satyaṁ te pratijāne priyo 'si me",t:"Fix your mind on Me, be devoted to Me, offer to Me, bow to Me. You will surely come to Me — this I promise you truly, for you are dear to Me.",n:"Resolution to pride. The ego's grasping for status is answered by something it cannot manufacture: being called, simply, dear."},
+"18:66":{s:"sarva-dharmān parityajya mām ekaṁ śaraṇaṁ vraja\nahaṁ tvāṁ sarva-pāpebhyo mokṣayiṣyāmi mā śucaḥ",t:"Letting go of all duties, take refuge in Me alone. I shall free you from all wrongs; do not grieve.",n:"The Gītā's culminating release. Sin, fear, and grief are answered in a single line — and it ends, tenderly, with 'do not grieve.'"},
+"18:71":{s:"śraddhāvān anasūyaś ca śṛṇuyād api yo naraḥ\nso 'pi muktaḥ śubhāṁl lokān prāpnuyāt puṇya-karmaṇām",t:"And the one who merely listens, with faith and without envy, is also freed, and reaches the blessed worlds of the good.",n:"The threshold is gentle: listening itself, free of envy, is enough to begin. Freedom does not require that you start already pure."},
+"18:78":{s:"yatra yogeśvaraḥ kṛṣṇo yatra pārtho dhanur-dharaḥ\ntatra śrīr vijayo bhūtir dhruvā nītir matir mama",t:"Wherever there is Kṛṣṇa, lord of yoga, and Arjuna, bearer of the bow, there are fortune, victory, prosperity, and firm right — this is my conviction.",n:"The closing word, spoken as certainty rather than hope: where the divine and the willing soul stand together, the outcome is already sure."}
+};
+
+/* ---- The twenty situations: ordered verses, with resolution markers ---- */
+const SITS = [
+ {name:"Anger", essence:"From a brooding thought to ruin — broken by serenity and by cultivated calm.",
+  v:[["2:56"],["2:62"],["2:63"],["2:64","r"],["2:65","r"],["16:1"],["16:2"],["16:3"],["5:26"],["16:21"],["16:22","r"]]},
+ {name:"Pride", essence:"The ego's monologue, met by a tenderness it cannot manufacture.",
+  v:[["16:4"],["16:13"],["16:15"],["18:58"],["16:5","r"],["18:26","r"],["18:65","r"]]},
+ {name:"Lust", essence:"Naming the enemy, mapping the ground, and striking from above it.",
+  v:[["3:37"],["5:22"],["3:41"],["3:42"],["3:43","r"],["16:21"]]},
+ {name:"Discriminated Against", essence:"A sight beneath rank — and a door the world's hierarchy cannot close.",
+  v:[["5:18"],["6:32"],["5:19"],["9:29"],["9:32","r"]]},
+ {name:"Depression", essence:"From 'rise' to a joy, and a deathlessness, that don't depend on the world.",
+  v:[["2:3"],["2:11","r"],["2:14"],["2:15"],["5:21","r"]]},
+ {name:"Greed", essence:"Grasping diagnosed at its source, and undone by letting the fruit go.",
+  v:[["14:17"],["16:21"],["17:25","r"],["16:22","r"]]},
+ {name:"Forgetfulness", essence:"The guide was always within; only the turning toward it remains.",
+  v:[["18:61"],["18:62","r"],["15:15","r"]]},
+ {name:"Feeling Sinful", essence:"A boat, a fire, a promise — and a final refuge for the heaviest past.",
+  v:[["4:36"],["4:37"],["5:10"],["14:6"],["9:30"],["9:31","r"],["10:3"],["18:66","r"]]},
+ {name:"Death of a Loved One", essence:"Grief reframed: a brief visibility between two mysteries.",
+  v:[["2:13"],["2:20"],["2:22"],["2:25"],["2:27"],["2:28","r"]]},
+ {name:"Uncontrolled Mind", essence:"The mind hard as wind — held, in the end, by practice and release.",
+  v:[["6:5"],["6:6"],["6:26"],["6:34"],["6:35","r"],["6:36","r"]]},
+ {name:"Laziness", essence:"Inertia unmasked as counterfeit peace, and the call to act freely.",
+  v:[["18:39"],["3:8","r"],["3:19","r"],["3:20"],["6:16"]]},
+ {name:"Confusion", essence:"Bewilderment confessed — and answered, twice, until it dissolves.",
+  v:[["2:7"],["2:11","r"],["3:2"],["3:3","r"],["18:61","r"]]},
+ {name:"Demotivated", essence:"Acting through imperfection, as an instrument rather than sole author.",
+  v:[["18:48"],["11:33","r"],["18:78","r"]]},
+ {name:"Losing Hope", essence:"Met where you stand, carried for what you cannot hold, promised victory.",
+  v:[["4:11"],["9:22","r"],["9:34"],["18:66","r"],["18:78","r"]]},
+ {name:"Practising Forgiveness", essence:"Forgiveness sought, granted gently, then named as a strength.",
+  v:[["11:44"],["11:50","r"],["16:1"],["16:2"],["16:3"],["12:13","r"],["12:14","r"]]},
+ {name:"Seeking Peace", essence:"The unmoved ocean — peace uncovered through wisdom and surrender.",
+  v:[["2:66"],["2:70"],["2:71","r"],["2:72","r"],["4:39","r"],["5:29","r"],["8:28"]]},
+ {name:"Dealing with Envy", essence:"Comparison undone by contentment in something whole.",
+  v:[["16:19"],["12:13","r"],["12:14","r"],["18:71"]]},
+ {name:"Loneliness", essence:"Separation as appearance; one undivided light seated in every heart.",
+  v:[["13:16"],["13:18"],["18:61"],["6:30","r"],["9:29","r"]]},
+ {name:"Fear", essence:"Clear seeing, a gentle face, and the refuge that dissolves fear.",
+  v:[["18:30"],["11:50"],["4:10","r"],["18:66","r"]]},
+ {name:"Temptation", essence:"Honest about the senses; freed by a higher taste and a deeper refuge.",
+  v:[["2:60"],["2:61"],["2:70"],["2:59","r"],["7:14","r"]]}
+];
+
+/* ---- Render ---- */
+const list = document.getElementById('list');
+const chips = document.getElementById('chips');
+const q = document.getElementById('q');
+let activeFilter = null;
+
+function verseHTML(ref, isRes){
+  const d = V[ref];
+  if(!d) return '';
+  return `<div class="v ${isRes?'res':''}" data-text="${(ref+' '+d.t+' '+d.n).toLowerCase()}">
+    <div class="v-ref"><span class="v-num">Ch. ${ref.replace(':','.')}</span>${isRes?'<span class="tag">Resolution</span>':''}</div>
+    <div class="skt">${d.s}</div>
+    <div class="tr">${d.t}</div>
+    <div class="nt">${d.n}</div>
+  </div>`;
+}
+
+function build(){
+  list.innerHTML = '';
+  SITS.forEach((s,i)=>{
+    const open = (i===0 && !activeFilter);
+    const sec = document.createElement('section');
+    sec.className = 'sit'+(open?' open':'');
+    sec.dataset.name = s.name.toLowerCase();
+    const refs = s.v.map(x=>x[0]).join(', ').replace(/:/g,'.');
+    sec.innerHTML = `
+      <div class="sit-head">
+        <span class="sit-no">${String(i+1).padStart(2,'0')}</span>
+        <div class="sit-main">
+          <div class="sit-name">${s.name}</div>
+          <div class="sit-essence">${s.essence}</div>
+        </div>
+        <div class="sit-meta"><span>${s.v.length} verses</span><span class="caret"></span></div>
+      </div>
+      <div class="verses">${s.v.map(x=>verseHTML(x[0], x[1]==='r')).join('')}</div>`;
+    sec.querySelector('.sit-head').addEventListener('click',()=>sec.classList.toggle('open'));
+    list.appendChild(sec);
+  });
+}
+
+
+function buildFilter(){
+  const categoryFilter = document.getElementById('categoryFilter');
+  if(!categoryFilter) return;
+  SITS.forEach(s=>{
+    const opt=document.createElement('option');
+    opt.value=s.name.toLowerCase();
+    opt.textContent=s.name;
+    categoryFilter.appendChild(opt);
+  });
+  categoryFilter.addEventListener('change',()=>{
+    activeFilter=categoryFilter.value||null;
+    applyFilter();
+  });
+}
+
+
+function applyFilter(){
+  const term = q.value.trim().toLowerCase();
+  let shown=0;
+  [...list.children].forEach(sec=>{
+    const nameMatch = !activeFilter || sec.dataset.name===activeFilter;
+    let visibleVerses=0;
+    sec.querySelectorAll('.v').forEach(v=>{
+      const hit = !term || v.dataset.text.includes(term) || sec.dataset.name.includes(term);
+      v.style.display = hit?'block':'none';
+      if(hit) visibleVerses++;
+    });
+    const show = nameMatch && (term==='' ? true : visibleVerses>0);
+    sec.style.display = show?'block':'none';
+    if(show){
+      shown++;
+      if(term){ sec.classList.add('open'); }
+    }
+  });
+  let e=document.getElementById('empty');
+  if(shown===0){
+    if(!e){e=document.createElement('div');e.id='empty';e.className='empty';list.appendChild(e);}
+    e.textContent='Nothing here matches that — try a feeling like "grief" or a verse like "2:47".';
+  } else if(e){e.remove();}
+}
+
+q.addEventListener('input',()=>{
+  if(q.value.trim()){
+    activeFilter=null;
+    [...chips.children].forEach(c=>c.classList.toggle('on',c.dataset.f===''));
+  }
+  applyFilter();
+});
+
+build();
+buildFilter();
+
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const controls = document.querySelector('.controls');
+  if(window.scrollY > 80){
+    controls.classList.add('scrolled');
+  } else {
+    controls.classList.remove('scrolled');
+  }
+  lastScroll = window.scrollY;
+});
+
+</script>
+</body>
+</html>
